@@ -1,6 +1,7 @@
 package aaronarthur.Ch4Examples;
 
 import java.util.Scanner;
+import java.util.concurrent.ThreadLocalRandom;
 
 // Aaron Arthur 10/18 Number guessing game
 
@@ -22,7 +23,8 @@ public class GuessMyNumber {
 				+ "1: Play game\n"
 				+ "2: Options\n"
 				+ "3: Credits\n"
-				+ "4: Exit\n"
+				+ "4: Have Computer Play\n"
+				+ "5: Exit\n"
 				+ "What do you want to do?: ");
 		choice = input.nextInt();
 		
@@ -31,7 +33,7 @@ public class GuessMyNumber {
 			System.out.println("\nYou have decided to play the game. ");
 			
 			// Generate random number
-			int randNum = (int) (Math.random() * maxNum);
+			int randNum = ThreadLocalRandom.current().nextInt(1, maxNum);
 			
 			
 			// Start betting
@@ -166,6 +168,84 @@ public class GuessMyNumber {
 			
 		}
 		else if (choice == 4) {
+			System.out.println("\nYou have decided to let the computer play the game. ");
+			
+			// Generate random number
+			int randNum = ThreadLocalRandom.current().nextInt(1, maxNum);
+			
+			// Initialize variables
+			int compMin = 1;
+			int compMax = maxNum;
+			
+			// Start while loop
+			int lives = initLives;
+			while (lives > 0 && points >= 0) {
+
+				// Print amount of lives and money
+				System.out.println("Lives: " + lives);
+				System.out.println("Points: " + points);
+				
+				// Get first guess of computer
+				int compGuess = ThreadLocalRandom.current().nextInt(compMin , compMax);
+				
+				System.out.println("\nThe computer guessed " + compGuess);
+				
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				// Compare user number to random number
+				if (compGuess == randNum) {
+					System.out.println("\nYou have guessed correctly!\n");
+					if (lives >= 5) {
+						points += (wager *  6);
+					}
+					else if (lives == 4) {
+						points += (wager * 5);
+						
+					}
+					else if (lives == 3) {
+						points += (wager * 4);
+						
+					}
+					else if (lives == 2) {
+						points += (wager * 3);
+						
+					}
+					else if (lives == 1) {
+						points += (wager * 2);
+						
+					}
+					
+					choice = 0;
+					break;
+					
+				}
+				else if (compGuess < randNum) {
+					System.out.println("\nYou guessed too low." );
+					lives -= 1;
+					compMin = compGuess;
+					if (lives == 0) {
+						System.out.println("You ran out of lives. ");
+					}
+					
+				}
+				else if (compGuess > randNum) {
+					System.out.println("\nYou guessed too high." );
+					compMax = compGuess;
+					lives -= 1;
+					if (lives == 0) {
+						System.out.println("You ran out of lives. ");
+					}
+					
+				}
+				
+			}
+					
+		}
+		else if (choice == 5) {
 			System.out.println("\nExiting program. ");
 			System.exit(0);
 			
