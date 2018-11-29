@@ -18,7 +18,7 @@ public class GuessMyNumber {
 		
 		// Create menu for program
 		int choice = 0;
-		while (choice != 4) {
+		while (choice != 5) {
 		System.out.print("Welcome to the Guess my Number Game!\n"
 				+ "1: Play game\n"
 				+ "2: Options\n"
